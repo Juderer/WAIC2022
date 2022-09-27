@@ -1,8 +1,22 @@
 import numpy as np
 import torch
+import random
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 from modelDesign_1 import Model_1
+
+
+def produce_sample(trainX):
+    N, _, _, _ = trainX.shape
+    for i in range(N):
+        if random.random() > 0.7:
+            # trainX[i, :, 0:4, :] = 0.0
+            # trainX[i, :, 20:24, :] = 0.0
+            # trainX[i, :, 48:52, :] = 0.0
+            # trainX[i, :, 68:71, :] = 0.0
+            trainX[i, :, 4:20, :] = 0.0
+            trainX[i, :, 24:48, :] = 0.0
+            trainX[i, :, 52:68, :] = 0.0
 
 
 class MyDataset(Dataset):
@@ -63,7 +77,7 @@ if __name__ == '__main__':
     print('The current dataset is : %s' % (file_name1))
     CIR = np.load(file_name1)
     trainX = CIR.transpose((2, 1, 3, 0))  # [none, 256, 72, 2] -> [none, 128*3]
-    # batch size, channels, W, H
+    produce_sample(trainX)
 
     file_name2 = '../dataset/data/Case_1_2_Training_Label.npy'
     print('The current dataset is : %s' % (file_name2))
