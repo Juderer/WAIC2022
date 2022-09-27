@@ -55,9 +55,9 @@ class MyDataset(Dataset):
 
 BATCH_SIZE = 64
 LEARNING_RATE = 0.0001
-TOTAL_EPOCHS = 100
+TOTAL_EPOCHS = 150
 split_num = 1000
-change_learning_rate_epochs = 20
+change_learning_rate_epochs = 50
 
 model_save = 'modelSubmit_2.pth'
 
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     trainY = POS.transpose((1, 0))  # [none, 2]
 
     model = Model_2()
-    model.load_state_dict(torch.load('./modelSubmit_1.pth'))
+    model.load_state_dict(torch.load('./modelSubmit_1_zeroT.pth', map_location='cpu'))
     model = model.to(DEVICE)
     # for name, param in model.named_parameters():
     #     if 'fc_layer' not in name:

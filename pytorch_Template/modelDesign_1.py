@@ -18,7 +18,7 @@ class Model_1(nn.Module):
 
         fc_layers = [nn.Linear(64 * 9 * 5, 256), nn.LeakyReLU()]
         fc_layers.extend([nn.Linear(256, 128), nn.LeakyReLU()])
-        fc_layers.extend([nn.Linear(128, 2)])
+        fc_layers.extend([nn.Linear(128, 2), nn.ReLU()])
         self.fc_layer = nn.Sequential(*fc_layers)
 
     def forward(self, x, data_format='channels_last'):
@@ -38,4 +38,6 @@ class Model_1(nn.Module):
 
         out = self.fc_layer(x)
 
+        out = torch.cat([torch.clamp(out[:, 0:1], 0, 120),
+                         torch.clamp(out[:, 1:2], 0, 60)], dim=1)
         return out

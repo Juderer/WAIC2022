@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 import torch
 import random
@@ -61,15 +63,21 @@ class MyTestset(Dataset):
 
 BATCH_SIZE = 256
 LEARNING_RATE = 0.001
-TOTAL_EPOCHS = 100
+TOTAL_EPOCHS = 150
 split_ratio = 0.2
 change_learning_rate_epochs = 50
-
-model_save = 'modelSubmit_1.pth'
 
 DEVICE = torch.device("cpu")
 if torch.cuda.is_available():
     DEVICE = torch.device("cuda:0")
+
+is_zero = False
+if len(sys.argv) > 1:
+    is_zero = True if int(sys.argv[1]) > 0 else False
+print('is_zero=%s' % str(is_zero))
+
+# model_save = 'modelSubmit_1.pth'
+model_save = 'modelSubmit_1_zero%s.pth' % ('T' if is_zero else 'F')
 
 if __name__ == '__main__':
 
@@ -77,7 +85,8 @@ if __name__ == '__main__':
     print('The current dataset is : %s' % (file_name1))
     CIR = np.load(file_name1)
     trainX = CIR.transpose((2, 1, 3, 0))  # [none, 256, 72, 2] -> [none, 128*3]
-    produce_sample(trainX)
+    if is_zero:
+        produce_sample(trainX)
 
     file_name2 = '../dataset/data/Case_1_2_Training_Label.npy'
     print('The current dataset is : %s' % (file_name2))
